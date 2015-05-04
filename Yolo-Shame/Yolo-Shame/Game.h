@@ -1,20 +1,26 @@
-#pragma once // GCC supports this, so it should works on Linux?
+#pragma once
 
 #include<SFML\Graphics.hpp>
+
+#include "Grid.h"
+
 class Game
 {
 public:
 	Game();
-	~Game()=default;
+	~Game() = default;
 
-	void run();
+
+	static sf::RenderWindow& getWindow() { return mWindow; }
+
+	void Run();
 private:
-	sf::RenderWindow mWindow;
+	static sf::RenderWindow mWindow;
 
-	sf::CircleShape mShape;
+	Grid mBoard;
 
-	void handleEvents();
-	void update();
-	void render();
+	void HandleEvents();
+	void Update();
+	void Render();
 };
 

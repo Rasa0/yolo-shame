@@ -1,30 +1,27 @@
-#include<iostream>
 
 #include "Game.h"
 
-using namespace std; // bleh
+sf::RenderWindow Game::mWindow;
 
 Game::Game()
 {
-	mWindow.create({ 800, 600 }, "Title Text");
+	mWindow.create({ 800, 600 }, "Tile Wars"); // TODO: Fix fullscreen, resolution, and rezise functionality
 
-	mShape.setFillColor(sf::Color::Green);
-	mShape.setPosition({ 100, 100 });
-	mShape.setRadius(50);
+	mBoard.Init(15, 15);
 }
 
-void Game::run()
+void Game::Run()
 {
 	// Game loop:
 	while (mWindow.isOpen())
 	{
-		handleEvents();
-		update(); // TODO: Fix dt and proper time handling
-		render();
+		HandleEvents();
+		Update(); // TODO: Fix dt and proper time handling
+		Render();
 	}
 }
 
-void Game::handleEvents()
+void Game::HandleEvents()
 {
 	sf::Event event; // Is a Union, members available depend on EventType
 	while (mWindow.pollEvent(event))
@@ -34,27 +31,21 @@ void Game::handleEvents()
 			case sf::Event::EventType::Closed:
 				mWindow.close();
 				break;
-			case sf::Event::KeyPressed:
-				if (event.key.code == sf::Keyboard::Space)
-				{
-					mWindow.setTitle("SPAAAAACE!");
-				}
-				break;
 			default:
 				break;
 		}
 	}
 }
 
-void Game::update()
+void Game::Update()
 {
 }
 
-void Game::render()
+void Game::Render()
 {
 	mWindow.clear();
 
-	mWindow.draw(mShape);
+	mBoard.Draw();
 
 	mWindow.display();
 }
