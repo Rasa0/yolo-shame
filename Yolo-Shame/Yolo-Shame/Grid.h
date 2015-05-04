@@ -8,7 +8,7 @@ class Grid
 {
 public:
 	Grid();
-	~Grid() = default;
+	~Grid();
 
 
 	void Init(int width, int length);

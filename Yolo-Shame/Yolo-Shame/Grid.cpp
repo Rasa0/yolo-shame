@@ -1,12 +1,29 @@
 
-#include "Game.h"
 #include "Grid.h"
-#include "Player.h"
-#include "Units.h"
 
-Grid::Grid()
+Grid::Grid() { mGrid = nullptr; }
+
+Grid::~Grid() { Deinit(); }
+
+
+void Grid::Init(int width, int height)
 {
-	mGrid = nullptr;
+	Deinit();
+
+	mWidth = width;
+	mHeight = height;
+
+	mGrid = new Tile*[width];
+
+	for (int i = 0; i < width; i++)
+	{
+		mGrid[i] = new Tile[height];
+
+		for (int j = 0; j < height; j++)
+		{
+			mGrid[i][j].setPosition({ i * 32.f, j * 32.f });
+		}
+	}
 }
 
 void Grid::Deinit()
@@ -22,30 +39,6 @@ void Grid::Deinit()
 	delete mGrid;
 
 	mGrid = nullptr;
-}
-
-void Grid::Init(int width, int height)
-{
-	mWidth = width;
-	mHeight = height;
-
-	mGrid = new Tile*[width];
-
-	for (int i = 0; i < width; i++)
-	{
-		mGrid[i] = new Tile[height];
-	}
-
-	Player tPlayer(0, sf::Color::White);
-	Units tUnits(tPlayer, 0);
-
-	for (int i = 0; i < width; i++)
-	{
-		for (int j = 0; j < height; j++)
-		{
-			mGrid[i][j].Init({ i * 32.f, j * 32.f }, tUnits);
-		}
-	}
 }
 
 void Grid::Draw()

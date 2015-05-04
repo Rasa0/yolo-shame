@@ -5,7 +5,7 @@ sf::RenderWindow Game::mWindow;
 
 Game::Game()
 {
-	mWindow.create({ 800, 600 }, "Tile Wars"); // TODO: Fix fullscreen, resolution, and rezise functionality
+	mWindow.create({ 800, 600 }, "Tile Wars");
 
 	mBoard.Init(15, 15);
 }
@@ -16,7 +16,7 @@ void Game::Run()
 	while (mWindow.isOpen())
 	{
 		HandleEvents();
-		Update(); // TODO: Fix dt and proper time handling
+		Update();
 		Render();
 	}
 }

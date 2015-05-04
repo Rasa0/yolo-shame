@@ -5,19 +5,26 @@
 class Player
 {
 public:
-	Player()  = default;
+	enum PlayerID
+	{
+		NoPlayer = 0,
+		Player1,
+		Player2
+	};
+
+	Player() : mColor(sf::Color::White), mID(NoPlayer) {}
 	~Player() = default;
 
-	Player(int id, sf::Color color) : mID(id), mColor(color) {}
+	Player(PlayerID id, sf::Color color) : mID(id), mColor(color) {}
 
 
 	void setColor(sf::Color color) { mColor = color; }
-	void setID(int id) { mID = id; }
+	void setID(PlayerID id) { mID = id; }
 
 	sf::Color getColor() { return mColor; }
-	int getID() { return mID; }
+	PlayerID getID() { return mID; }
 private:
-	int mID;
+	PlayerID mID;
 	sf::Color mColor;
 };
 
