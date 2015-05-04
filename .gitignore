@@ -26,3 +26,22 @@
 *.exe
 *.out
 *.app
+
+# Visual studio files
+*.suo
+*.sdf
+*.opensdf
+*.csproj.user
+*.vbproj.user 
+#*.vcxproj.user
+*.csproj.webinfo
+*.vbproj.webinfo
+*.log
+ipch
+
+# Build folders
+Debug
+Release
+Yolo-Shame/Debug
+Yolo-Shame/Release
+
