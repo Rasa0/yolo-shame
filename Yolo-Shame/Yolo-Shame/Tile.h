@@ -16,7 +16,12 @@ public:
 	Tile();
 	~Tile() = default;
 
-	void setPosition(sf::Vector2f pos) {mShape.setPosition(pos);}
+	void Init(TileType type, Player* owner=nullptr, unsigned int unitCount=0);
+
+	void SetPosition(sf::Vector2f pos);
+	void SetType(TileType type);
+	void SetOwner(Player* owner);
+	void SetUnitCount(unsigned int count);
 
 	void Draw();
 private:
@@ -25,6 +30,6 @@ private:
 	sf::RectangleShape mShape;
 
 	TileType mType;
-	Player mOwner;
+	Player* mOwner;
 	unsigned int mUnitCount;
 };

@@ -2,13 +2,21 @@
 #include "Game.h"
 
 sf::RenderWindow Game::mWindow;
+Player Game::mPlayers[Player::NUM_PLAYER];
+Grid Game::mBoard;
 
-Game::Game()
+
+void Game::Init()
 {
 	mWindow.create({ 800, 600 }, "Tile Wars");
 
-	mBoard.Init(15, 15);
+	mBoard.LoadFromFile("blaj");
+
+	Game::mPlayers[0].Init(Player::PLAYER1, sf::Color::Blue);
+	Game::mPlayers[1].Init(Player::PLAYER2, sf::Color::Red);
 }
+
+void Game::Deinit() {}
 
 void Game::Run()
 {

@@ -3,24 +3,27 @@
 #include<SFML\Graphics.hpp>
 
 #include "Grid.h"
+#include "Player.h"
 
 class Game
 {
 public:
-	Game();
-	~Game() = default;
+	static sf::RenderWindow& GetWindow() { return mWindow; }
+	static Player* GetPlayer(Player::PlayerID id) { return &mPlayers[id]; }
 
+	static void Init();
+	static void Deinit();
 
-	static sf::RenderWindow& getWindow() { return mWindow; }
-
-	void Run();
+	static void Run();
 private:
 	static sf::RenderWindow mWindow;
+	static Player mPlayers[Player::NUM_PLAYER];
 
-	Grid mBoard;
+	static Grid mBoard;
+	
 
-	void HandleEvents();
-	void Update();
-	void Render();
+	static void HandleEvents();
+	static void Update();
+	static void Render();
 };
 

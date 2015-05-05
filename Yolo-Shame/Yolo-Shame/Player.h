@@ -7,16 +7,17 @@ class Player
 public:
 	enum PlayerID
 	{
-		NoPlayer = 0,
-		Player1,
-		Player2
+		PLAYER1=0,
+		PLAYER2,
+		NUM_PLAYER
 	};
 
-	Player() : mColor(sf::Color::White), mID(NoPlayer) {}
-	~Player() = default;
+	Player() : mColor(sf::Color::White) {}
 
 	Player(PlayerID id, sf::Color color) : mID(id), mColor(color) {}
 
+
+	void Init(PlayerID id, sf::Color color);
 
 	void setColor(sf::Color color) { mColor = color; }
 	void setID(PlayerID id) { mID = id; }

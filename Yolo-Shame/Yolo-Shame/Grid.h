@@ -1,5 +1,7 @@
 #pragma once
 
+#include<string>
+
 #include<SFML\Graphics.hpp>
 
 #include "Tile.h"
@@ -13,6 +15,8 @@ public:
 
 	void Init(int width, int length);
 	void Deinit();
+
+	void LoadFromFile(std::string path);
 
 	void Draw();
 private:

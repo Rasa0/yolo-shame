@@ -9,8 +9,9 @@ int main() {
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 #endif
 
-	Game myGame;
-	myGame.Run();
+	Game::Init();
+	Game::Run();
+	Game::Deinit();
 
 	return 0;
 }
