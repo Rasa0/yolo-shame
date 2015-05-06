@@ -9,7 +9,6 @@ sf::Font Game::mFont;
 
 Grid Game::mBoard;
 sf::Vector2f Game::mBoardPos;
-float Game::mTileSize;
 
 
 void Game::Init()
@@ -19,8 +18,6 @@ void Game::Init()
 
 	Game::mPlayers[0].Init(Player::PLAYER1, sf::Color::Blue);
 	Game::mPlayers[1].Init(Player::PLAYER2, sf::Color::Red);
-
-	mTileSize = 32.f;
 
 	mBoardPos = { 30, 30 };
 	mBoard.LoadFromFile("blaj"); // Incomplete
@@ -47,12 +44,28 @@ void Game::HandleEvents()
 	{
 		switch (event.type)
 		{
+			case sf::Event::EventType::MouseButtonPressed:
+				HandleMousePress(event);
+				break;
 			case sf::Event::EventType::Closed:
 				mWindow.close();
 				break;
 			default:
 				break;
 		}
+	}
+}
+
+void Game::HandleMousePress(sf::Event event)
+{
+	switch (event.mouseButton.button)
+	{
+		case sf::Mouse::Left:
+			break;
+		case sf::Mouse::Right:
+			break;
+		default:
+			break;
 	}
 }
 
@@ -67,12 +80,4 @@ void Game::Render()
 	mBoard.Draw();
 
 	mWindow.display();
-}
-
-void Game::SetTileSize(float size)
-{
-	mTileSize = size;
-
-	mBoard.SetPosition(mBoard.GetPosition());
-	mBoard.ResetTileSize();
 }

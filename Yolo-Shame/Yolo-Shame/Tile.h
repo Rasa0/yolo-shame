@@ -19,7 +19,7 @@ public:
 
 	void Init(TileType type, Player* owner = nullptr, unsigned int unitCount = 0);
 
-	void SetSize();
+	void SetSize(float size);
 	void SetPosition(sf::Vector2f pos);
 	void SetType(TileType type);
 	void SetOwner(Player* owner);

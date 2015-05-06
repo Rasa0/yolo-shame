@@ -5,7 +5,7 @@
 Tile::Tile()
 : mType(Walkable), mUnitCount(0), mOwner(nullptr)
 {
-	mShape.setSize({ Game::GetTileSize(), Game::GetTileSize() });
+	mShape.setSize({ 32, 32 }); // TODO: chhage?
 	mShape.setFillColor(sf::Color::White);
 
 	mShape.setOutlineColor(sf::Color::Black);
@@ -52,9 +52,9 @@ void Tile::SetOwner(Player* owner)
 	mOwner = owner;
 }
 
-void Tile::SetSize()
+void Tile::SetSize(float size)
 {
-	mShape.setSize({Game::GetTileSize(), Game::GetTileSize()});
+	mShape.setSize({ size, size });
 }
 
 void Tile::Draw()
@@ -63,12 +63,12 @@ void Tile::Draw()
 
 	if (mOwner)
 	{
-		sf::CircleShape playerToken(Game::GetTileSize()/2.f); // TODO: put all these semi-temp vars somewhere good
+		sf::CircleShape playerToken(mShape.getSize().x/2.f); // TODO: put all these semi-temp vars somewhere good
 		playerToken.setFillColor(mOwner->getColor());
 		playerToken.setPosition(mShape.getPosition());
 
-		sf::Text unitcount({ std::to_string(mUnitCount) }, Game::GetFont(), 12u*Game::GetTileSize()/32u); // MagicNumber: sizes, the ratio is just for rezizing
-		unitcount.setPosition(mShape.getPosition() + sf::Vector2f{ 5 * Game::GetTileSize() / 32u, 8 * Game::GetTileSize() / 32u }); // MagicNumber: text position and sizes
+		sf::Text unitcount({ std::to_string(mUnitCount) }, Game::GetFont(), 12u*mShape.getSize().x/32u); // MagicNumber: sizes, the ratio is just for rezizing
+		unitcount.setPosition(mShape.getPosition() + sf::Vector2f{ 5 * mShape.getSize().x / 32u, 8 * mShape.getSize().x / 32u }); // MagicNumber: text position and sizes
 
 		Game::GetWindow().draw(playerToken);
 		Game::GetWindow().draw(unitcount);

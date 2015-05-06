@@ -6,7 +6,9 @@
 #include "Tile.h"
 #include "Player.h"
 
-Grid::Grid() : mGrid(nullptr), mPosition({ 0, 0 }) {}
+Grid::Grid() : mGrid(nullptr) {
+	SetPosition({ 0, 0 });
+}
 
 Grid::~Grid() { Deinit(); }
 
@@ -15,18 +17,15 @@ void Grid::Init(int width, int height, sf::Vector2f position)
 {
 	Deinit();
 
-	mWidth = width;
-	mHeight = height;
-
-	mPixelWidth = width*Game::GetTileSize();
-	mPixelHeight = height*Game::GetTileSize();
-
 	mGrid = new Tile*[width];
 
 	for (int i = 0; i < width; i++)
 	{
 		mGrid[i] = new Tile[height];
 	}
+
+	mWidth = width;
+	mHeight = height;
 
 	SetPosition(position);
 }
@@ -73,21 +72,23 @@ void Grid::SetPosition(sf::Vector2f position)
 	{
 		for (int j = 0; j < mHeight; j++)
 		{
-			mGrid[i][j].SetPosition(sf::Vector2f{ i * Game::GetTileSize(), j * Game::GetTileSize() } + mPosition); // Offset the tile pos with grid pos
+			mGrid[i][j].SetPosition(sf::Vector2f{ i * mTileSize, j * mTileSize } + mPosition); // Offset the tile pos with grid pos
 		}
 	}
 }
 
-void Grid::ResetTileSize()
+/*void Grid::SetTileSize(float size)
 {
 	for (int i = 0; i < mWidth; i++)
 	{
 		for (int j = 0; j < mHeight; j++)
 		{
-			mGrid[i][j].SetSize();
+			mGrid[i][j].SetSize(size);
 		}
 	}
-}
+
+	//SetPosition(mPosition);
+}*/
 
 void Grid::Draw()
 {
