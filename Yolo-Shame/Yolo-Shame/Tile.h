@@ -3,6 +3,7 @@
 #include<SFML\Graphics.hpp>
 
 #include "Player.h"
+#include "Game.h"
 
 class Tile
 {
@@ -16,8 +17,9 @@ public:
 	Tile();
 	~Tile() = default;
 
-	void Init(TileType type, Player* owner=nullptr, unsigned int unitCount=0);
+	void Init(TileType type, Player* owner = nullptr, unsigned int unitCount = 0);
 
+	void SetSize();
 	void SetPosition(sf::Vector2f pos);
 	void SetType(TileType type);
 	void SetOwner(Player* owner);
@@ -25,7 +27,7 @@ public:
 
 	void Draw();
 private:
-	
+
 
 	sf::RectangleShape mShape;
 

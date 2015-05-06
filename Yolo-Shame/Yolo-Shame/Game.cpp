@@ -1,21 +1,30 @@
 
+#include<iostream>
+
 #include "Game.h"
 
 sf::RenderWindow Game::mWindow;
 Player Game::mPlayers[Player::NUM_PLAYER];
-Grid Game::mBoard;
 sf::Font Game::mFont;
+
+Grid Game::mBoard;
+sf::Vector2f Game::mBoardPos;
+float Game::mTileSize;
+
 
 void Game::Init()
 {
 	mWindow.create({ 800, 600 }, "Tile Wars");
-
 	mFont.loadFromFile("Media/Fonts/arial.ttf");
-
-	mBoard.LoadFromFile("blaj");
 
 	Game::mPlayers[0].Init(Player::PLAYER1, sf::Color::Blue);
 	Game::mPlayers[1].Init(Player::PLAYER2, sf::Color::Red);
+
+	mTileSize = 32.f;
+
+	mBoardPos = { 30, 30 };
+	mBoard.LoadFromFile("blaj"); // Incomplete
+
 }
 
 void Game::Deinit() {}
@@ -58,4 +67,12 @@ void Game::Render()
 	mBoard.Draw();
 
 	mWindow.display();
+}
+
+void Game::SetTileSize(float size)
+{
+	mTileSize = size;
+
+	mBoard.SetPosition(mBoard.GetPosition());
+	mBoard.ResetTileSize();
 }
