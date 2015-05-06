@@ -59,10 +59,14 @@ void Tile::Draw()
 
 	if (mOwner)
 	{
-		sf::CircleShape playerToken({ 16 });
+		sf::CircleShape playerToken({ 16 }); // TODO: put all these semi-temp vars somewhere good
 		playerToken.setFillColor(mOwner->getColor());
 		playerToken.setPosition(mShape.getPosition());
 
+		sf::Text unitcount({ std::to_string(mUnitCount) }, Game::GetFont(), 12u);
+		unitcount.setPosition(mShape.getPosition() + sf::Vector2f{4, 8}); // TODO: make sure text is rendered in the middle without magic numbers
+
 		Game::GetWindow().draw(playerToken);
+		Game::GetWindow().draw(unitcount);
 	}
 }

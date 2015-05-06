@@ -4,11 +4,13 @@
 sf::RenderWindow Game::mWindow;
 Player Game::mPlayers[Player::NUM_PLAYER];
 Grid Game::mBoard;
-
+sf::Font Game::mFont;
 
 void Game::Init()
 {
 	mWindow.create({ 800, 600 }, "Tile Wars");
+
+	mFont.loadFromFile("Media/Fonts/arial.ttf");
 
 	mBoard.LoadFromFile("blaj");
 
