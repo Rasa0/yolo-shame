@@ -24,14 +24,17 @@ public:
 	void SetType(TileType type);
 	void SetOwner(Player* owner);
 	void SetUnitCount(unsigned int count);
+	void SetSelected(bool selected);
 
 	void Draw();
 private:
-
-
-	sf::RectangleShape mShape;
+	sf::RectangleShape mBackground; // HACK? perhaps make a TileShape that inherits drawable
+	sf::RectangleShape mOutline;
+	sf::RectangleShape mSelectOutline;
 
 	TileType mType;
 	Player* mOwner;
 	unsigned int mUnitCount;
+
+	bool mSelected;
 };

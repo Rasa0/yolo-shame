@@ -3,13 +3,18 @@
 #include "Tile.h"
 
 Tile::Tile()
-: mType(Walkable), mUnitCount(0), mOwner(nullptr)
+: mType(Walkable), mUnitCount(0), mOwner(nullptr), mSelected(false)
 {
-	mShape.setSize({ 32, 32 }); // TODO: chhage?
-	mShape.setFillColor(sf::Color::White);
+	SetSize(32); // MagicNumber: size
+	mBackground.setFillColor(sf::Color::White);
 
-	mShape.setOutlineColor(sf::Color::Black);
-	mShape.setOutlineThickness(1.f);
+	mOutline.setFillColor(sf::Color::Transparent);
+	mOutline.setOutlineColor(sf::Color::Black);
+	mOutline.setOutlineThickness(1);
+
+	mSelectOutline.setFillColor(sf::Color::Transparent);
+	mSelectOutline.setOutlineColor(sf::Color::Blue);
+	mSelectOutline.setOutlineThickness(2);
 }
 
 void Tile::Init(TileType type, Player* owner, unsigned int unitCount)
@@ -17,12 +22,21 @@ void Tile::Init(TileType type, Player* owner, unsigned int unitCount)
 	SetType(type);
 	SetOwner(owner);
 	SetUnitCount(unitCount);
+	SetSelected(false);
 }
 
+void Tile::SetSize(float size)
+{
+	mBackground.setSize({ size, size });
+	mOutline.setSize({ size-2, size-2 });
+	mSelectOutline.setSize({ size-4, size-4 });
+}
 
 void Tile::SetPosition(sf::Vector2f pos)
 {
-	mShape.setPosition(pos);
+	mBackground.setPosition(pos);
+	mOutline.setPosition({ pos.x + 1, pos.y + 1 });
+	mSelectOutline.setPosition({ pos.x + 2, pos.y + 2 });
 }
 
 void Tile::SetType(TileType type)
@@ -32,19 +46,14 @@ void Tile::SetType(TileType type)
 	switch (type)
 	{
 		case Tile::Wall:
-			mShape.setFillColor({ 75, 75, 75, 255 });
+			mBackground.setFillColor({ 75, 75, 75, 255 });
 			break;
 		case Tile::Walkable:  // Change? flag?
-			mShape.setFillColor(sf::Color::White);
+			mBackground.setFillColor(sf::Color::White);
 			break;
 		default:
 			break;
 	}
-}
-
-void Tile::SetUnitCount(unsigned int count)
-{
-	mUnitCount = count;
 }
 
 void Tile::SetOwner(Player* owner)
@@ -52,23 +61,34 @@ void Tile::SetOwner(Player* owner)
 	mOwner = owner;
 }
 
-void Tile::SetSize(float size)
+void Tile::SetUnitCount(unsigned int count)
 {
-	mShape.setSize({ size, size });
+	mUnitCount = count;
+}
+
+void Tile::SetSelected(bool selected)
+{
+	mSelected = selected;
 }
 
 void Tile::Draw()
 {
-	Game::GetWindow().draw(mShape);
+	Game::GetWindow().draw(mBackground);
+	Game::GetWindow().draw(mOutline);
+
+	if (mSelected)
+	{
+		Game::GetWindow().draw(mSelectOutline);
+	}
 
 	if (mOwner)
 	{
-		sf::CircleShape playerToken(mShape.getSize().x/2.f); // TODO: put all these semi-temp vars somewhere good
+		sf::CircleShape playerToken(mBackground.getSize().x / 2.f); // TODO: put all these semi-temp vars somewhere good
 		playerToken.setFillColor(mOwner->getColor());
-		playerToken.setPosition(mShape.getPosition());
+		playerToken.setPosition(mBackground.getPosition());
 
-		sf::Text unitcount({ std::to_string(mUnitCount) }, Game::GetFont(), 12u*mShape.getSize().x/32u); // MagicNumber: sizes, the ratio is just for rezizing
-		unitcount.setPosition(mShape.getPosition() + sf::Vector2f{ 5 * mShape.getSize().x / 32u, 8 * mShape.getSize().x / 32u }); // MagicNumber: text position and sizes
+		sf::Text unitcount({ std::to_string(mUnitCount) }, Game::GetFont(), 12u * mBackground.getSize().x / 32u); // MagicNumber: sizes, the ratio is just for rezizing
+		unitcount.setPosition(mBackground.getPosition() + sf::Vector2f{ 5 * mBackground.getSize().x / 32u, 8 * mBackground.getSize().x / 32u }); // MagicNumber: text position and sizes
 
 		Game::GetWindow().draw(playerToken);
 		Game::GetWindow().draw(unitcount);

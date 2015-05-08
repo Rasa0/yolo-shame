@@ -22,17 +22,18 @@ public:
 	float GetTileSize() { return mTileSize; }
 
 	void SetPosition(sf::Vector2f position);
-	//void SetTileSize(float size);
+	
+	bool GridRectContains(sf::Vector2f position);
 
-
-	//void ResetTileSize();
-	//void ResetGridRect();
+	void SelectTile(sf::Vector2u tile);
 
 	void Draw();
 private:
-	int mWidth, mHeight;
+	unsigned int mWidth, mHeight;
 	sf::FloatRect mGridRect;
 	sf::Vector2f mPosition; // Redundant? add in Game only?
+
+	sf::Vector2u mSelectedTile;
 
 	const float mTileSize=32;
 

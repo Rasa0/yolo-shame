@@ -44,14 +44,14 @@ void Game::HandleEvents()
 	{
 		switch (event.type)
 		{
-			case sf::Event::EventType::MouseButtonPressed:
-				HandleMousePress(event);
-				break;
-			case sf::Event::EventType::Closed:
-				mWindow.close();
-				break;
-			default:
-				break;
+		case sf::Event::EventType::MouseButtonPressed:
+			HandleMousePress(event);
+			break;
+		case sf::Event::EventType::Closed:
+			mWindow.close();
+			break;
+		default:
+			break;
 		}
 	}
 }
@@ -60,12 +60,23 @@ void Game::HandleMousePress(sf::Event event)
 {
 	switch (event.mouseButton.button)
 	{
-		case sf::Mouse::Left:
-			break;
-		case sf::Mouse::Right:
-			break;
-		default:
-			break;
+	case sf::Mouse::Left:
+	{
+							sf::Vector2f clickedCoords = mWindow.mapPixelToCoords({ event.mouseButton.x, event.mouseButton.y });
+
+							if (mBoard.GridRectContains(clickedCoords)) // clicked in grid
+							{
+								sf::Vector2u tileIndex{ clickedCoords / mBoard.GetTileSize() };
+								tileIndex.x -= 1;
+								tileIndex.y -= 1;
+								mBoard.SelectTile(tileIndex);
+							}
+							break;
+	}
+	case sf::Mouse::Right:
+		break;
+	default:
+		break;
 	}
 }
 
@@ -75,7 +86,7 @@ void Game::Update()
 
 void Game::Render()
 {
-	mWindow.clear();
+	mWindow.clear(sf::Color::Magenta);
 
 	mBoard.Draw();
 
