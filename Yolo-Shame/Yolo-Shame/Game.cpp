@@ -58,21 +58,22 @@ void Game::HandleEvents()
 
 void Game::HandleMousePress(sf::Event event)
 {
+	// TODO: Refactor this to mBoard? (make a handleclick function in mGrid)
+	sf::Vector2f clickedCoords = mWindow.mapPixelToCoords({ event.mouseButton.x, event.mouseButton.y }); // TODO: Can this get negative?
+
+	if (mBoard.GridRectContains(clickedCoords))
+	{
+		sf::Vector2u tileIndex = sf::Vector2u{ clickedCoords / mBoard.GetTileSize() };
+		tileIndex.x -= 1;
+		tileIndex.y -= 1;
+
+		mBoard.HandleClick(tileIndex, event.mouseButton.button);
+	}
+
 	switch (event.mouseButton.button)
 	{
 	case sf::Mouse::Left:
-	{
-							sf::Vector2f clickedCoords = mWindow.mapPixelToCoords({ event.mouseButton.x, event.mouseButton.y });
-
-							if (mBoard.GridRectContains(clickedCoords)) // clicked in grid
-							{
-								sf::Vector2u tileIndex{ clickedCoords / mBoard.GetTileSize() };
-								tileIndex.x -= 1;
-								tileIndex.y -= 1;
-								mBoard.SelectTile(tileIndex);
-							}
-							break;
-	}
+		break;
 	case sf::Mouse::Right:
 		break;
 	default:

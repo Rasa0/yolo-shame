@@ -24,8 +24,10 @@ public:
 	void SetPosition(sf::Vector2f position);
 	
 	bool GridRectContains(sf::Vector2f position);
+	void HandleClick(sf::Vector2u tileIndex, sf::Mouse::Button);
+	bool IsAdjacent(sf::Vector2u first, sf::Vector2u second);
 
-	void SelectTile(sf::Vector2u tile);
+	void SelectTile(sf::Vector2u tileIndex);
 
 	void Draw();
 private:

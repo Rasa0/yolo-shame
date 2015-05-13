@@ -9,7 +9,8 @@
 
 using namespace std;
 
-Grid::Grid() : mGrid(nullptr) {
+Grid::Grid() : mGrid(nullptr)
+{
 	SetPosition({ 0, 0 });
 }
 
@@ -34,7 +35,7 @@ void Grid::Init(int width, int height, sf::Vector2f position)
 	mGridRect.height = height*GetTileSize();
 
 	SetPosition(position);
-	mSelectedTile = { 0, 0 };
+
 	SelectTile({ 0, 0 });
 }
 
@@ -70,6 +71,8 @@ void Grid::LoadFromFile(std::string path) // Incomplete
 
 	mGrid[1][1].Init(Tile::Walkable, Game::GetPlayer(Player::PLAYER1), 100);
 	mGrid[mWidth - 2][mHeight - 2].Init(Tile::Walkable, Game::GetPlayer(Player::PLAYER2), 100);
+
+	SelectTile({ 0, 0 });
 }
 
 void Grid::SetPosition(sf::Vector2f position)
@@ -82,7 +85,7 @@ void Grid::SetPosition(sf::Vector2f position)
 	{
 		for (unsigned int j = 0; j < mHeight; j++)
 		{
-			mGrid[i][j].SetPosition(sf::Vector2f{ i * mTileSize, j * mTileSize } + mPosition); // Offset the tile pos with grid pos
+			mGrid[i][j].SetPosition(sf::Vector2f{ i * mTileSize, j * mTileSize } +mPosition); // Offset the tile pos with grid pos
 		}
 	}
 }
@@ -92,9 +95,32 @@ bool Grid::GridRectContains(sf::Vector2f position)
 	return mGridRect.contains(position);
 }
 
-void Grid::SelectTile(sf::Vector2u tile)
+void Grid::HandleClick(sf::Vector2u tileIndex, sf::Mouse::Button button)
 {
-	if (tile.x > mWidth || tile.y > mHeight)
+	switch (button)
+	{
+	case sf::Mouse::Left:
+		SelectTile(tileIndex);
+		break;
+	case sf::Mouse::Right:
+		if (IsAdjacent(tileIndex, mSelectedTile))
+		{
+			// TODO: implement rightclick behaviour
+		}
+		break;
+	default:
+		break;
+	}
+}
+
+bool Grid::IsAdjacent(sf::Vector2u first, sf::Vector2u second)
+{
+	return ((first.x + 1) == second.x || (first.x - 1) == second.x) != ((first.y + 1) == second.y || (first.y - 1) == second.y);
+}
+
+void Grid::SelectTile(sf::Vector2u tileIndex)
+{
+	if (tileIndex.x > mWidth || tileIndex.y > mHeight)
 	{
 		// TODO: Handle error
 		cout << "Select out of bounds, doing nothing (DEFINE THIS ERROR LATER)";
@@ -102,22 +128,22 @@ void Grid::SelectTile(sf::Vector2u tile)
 	{
 		mGrid[mSelectedTile.x][mSelectedTile.y].SetSelected(false);
 
-		mGrid[tile.x][tile.y].SetSelected(true);
-		mSelectedTile = tile;
+		mGrid[tileIndex.x][tileIndex.y].SetSelected(true);
+		mSelectedTile = tileIndex;
 	}
 }
 
 /*void Grid::SetTileSize(float size)
 {
-	for (int i = 0; i < mWidth; i++)
-	{
-		for (int j = 0; j < mHeight; j++)
-		{
-			mGrid[i][j].SetSize(size);
-		}
-	}
+for (int i = 0; i < mWidth; i++)
+{
+for (int j = 0; j < mHeight; j++)
+{
+mGrid[i][j].SetSize(size);
+}
+}
 
-	//SetPosition(mPosition);
+//SetPosition(mPosition);
 }*/
 
 void Grid::Draw()
