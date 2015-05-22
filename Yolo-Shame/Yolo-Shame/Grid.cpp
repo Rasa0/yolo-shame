@@ -7,8 +7,6 @@
 #include "Tile.h"
 #include "Player.h"
 
-using namespace std;
-
 Grid::Grid() : mGrid(nullptr)
 {
 	SetPosition({ 0, 0 });
@@ -138,23 +136,23 @@ Direction Grid::GetDirection(sf::Vector2u from, sf::Vector2u to)
 
 	if (dir.x == 1 && dir.y == 0)
 	{
-		cout << "Right" << endl;
+		std::cout << "Right" << std::endl;
 		return DirectionRight;
 	}
 	else if (dir.x == -1 && dir.y == 0)
 	{
-		cout << "Left" << endl;
+		std::cout << "Left" << std::endl;
 		return DirectionLeft;
 	}
 
 	if (dir.y == 1 && dir.x == 0)
 	{
-		cout << "Down" << endl;
+		std::cout << "Down" << std::endl;
 		return DirectionDown;
 	} 
 	else if (dir.y == -1 && dir.x == 0)
 	{
-		cout << "Up" << endl;
+		std::cout << "Up" << std::endl;
 		return DirectionUp;
 	}
 
@@ -166,7 +164,7 @@ void Grid::SelectTile(sf::Vector2u tileIndex)
 	if (tileIndex.x > mWidth || tileIndex.y > mHeight)
 	{
 		// TODO: Handle error
-		cout << "Select out of bounds, doing nothing (DEFINE THIS ERROR LATER)";
+		std::cout << "Select out of bounds, doing nothing (DEFINE THIS ERROR LATER)" << std::endl;
 	} else
 	{
 		mGrid[mSelectedTile.x][mSelectedTile.y].SetSelected(false);

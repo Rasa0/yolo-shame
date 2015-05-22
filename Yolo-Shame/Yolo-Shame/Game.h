@@ -24,7 +24,6 @@ private:
 
 	static Player mPlayers[Player::NUM_PLAYER];
 	static Grid mBoard;
-	static sf::Vector2f mBoardPos;
 
 	static std::vector<sf::Drawable*> mDrawables;	
 

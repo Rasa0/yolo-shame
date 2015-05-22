@@ -5,7 +5,7 @@
 #include "Tile.h"
 
 Tile::Tile()
-: mType(Walkable), mUnitCount(0), mOwner(nullptr), mSelected(false), mMoveDirection(DirectionNone), mMoveAmount(0)
+: mType(Walkable), mUnitCount(0), mOwner(nullptr), mSelected(false)
 {
 	SetSize(32); // MagicNumber: size
 	mBackground.setFillColor(sf::Color::White);
@@ -77,7 +77,7 @@ void Tile::SetMove(Direction direction, unsigned int amount)
 {
 	if (mOwner == nullptr)
 	{
-		std::cout << "Can't move, not owned!" << std::endl; // DEBUG
+		std::cout << "Can't move, not owned!" << std::endl; // HACK: Make this more general and less dependant.
 	}
 	else if (amount > mUnitCount)
 	{
