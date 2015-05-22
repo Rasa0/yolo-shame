@@ -78,8 +78,6 @@ void Game::HandleMousePress(sf::Event event)
 	if (mBoard.GridRectContains(clickedCoords))
 	{
 		sf::Vector2u tileIndex = sf::Vector2u{ (clickedCoords - mBoard.GetPosition()) / mBoard.GetTileSize() };
-		//tileIndex.x -= 1;
-		//tileIndex.y -= 1;
 
 		mBoard.HandleClick(tileIndex, event.mouseButton.button);
 	}

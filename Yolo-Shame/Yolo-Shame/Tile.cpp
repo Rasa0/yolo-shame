@@ -19,8 +19,9 @@ Tile::Tile()
 	mSelectOutline.setOutlineThickness(2);
 }
 
-void Tile::Init(TileType type, Player* owner, unsigned int unitCount)
+void Tile::Init(sf::Vector2u gridIndex, TileType type, Player* owner, unsigned int unitCount)
 {
+	SetGridIndex(gridIndex);
 	SetType(type);
 	SetOwner(owner);
 	SetUnitCount(unitCount);

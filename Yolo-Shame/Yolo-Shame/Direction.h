@@ -1,5 +1,7 @@
 #pragma once
 
+#include<SFML\Graphics.hpp>
+
 enum Direction
 {
 	DirectionNone = 0,
@@ -8,3 +10,5 @@ enum Direction
 	DirectionDown,
 	DirectionRight
 };
+
+Direction GetDirection(sf::Vector2u from, sf::Vector2u to);

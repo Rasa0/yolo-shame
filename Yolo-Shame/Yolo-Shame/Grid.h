@@ -12,25 +12,23 @@ public:
 	Grid();
 	~Grid();
 
-
-	void Init(int width, int length, sf::Vector2f position = { 30, 30 });
+	void Init(unsigned int width, unsigned int length, sf::Vector2f position = { 30, 30 });
 	void Deinit();
 
-	void LoadFromFile(std::string path); // Incomplete
+	void LoadFromFile(std::string path); // Incomplete: does not load from a file yet
+
 
 	sf::Vector2f GetPosition() { return mPosition; }
 	float GetTileSize() { return mTileSize; }
-	Tile& GetTile(sf::Vector2u tileIndex) { return mGrid[tileIndex.x][tileIndex.y]; }
+	Tile* GetTile(sf::Vector2u tileIndex);
 
 	void SetPosition(sf::Vector2f position);
 	
 	bool GridRectContains(sf::Vector2f position);
 	void HandleClick(sf::Vector2u tileIndex, sf::Mouse::Button);
-	bool IsAdjacent(sf::Vector2u first, sf::Vector2u second);
+	bool IsAdjacent(Tile* first, Tile* second);
 
-	Direction GetDirection(sf::Vector2u from, sf::Vector2u to);
-
-	void SelectTile(sf::Vector2u tileIndex);
+	void SelectTile(Tile* tile);
 
 	void Draw();
 private:
@@ -38,7 +36,7 @@ private:
 	sf::FloatRect mGridRect;
 	sf::Vector2f mPosition; // Redundant? add in Game only?
 
-	sf::Vector2u mSelectedTile;
+	Tile* mSelectedTile;
 
 	const float mTileSize=32;
 

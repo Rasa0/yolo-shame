@@ -7,6 +7,8 @@
 #include "Tile.h"
 #include "Player.h"
 
+#include "Direction.h"
+
 Grid::Grid() : mGrid(nullptr)
 {
 	SetPosition({ 0, 0 });
@@ -15,15 +17,20 @@ Grid::Grid() : mGrid(nullptr)
 Grid::~Grid() { Deinit(); }
 
 
-void Grid::Init(int width, int height, sf::Vector2f position)
+void Grid::Init(unsigned int width, unsigned int height, sf::Vector2f position)
 {
 	Deinit();
 
 	mGrid = new Tile*[width];
 
-	for (int i = 0; i < width; i++)
+	for (unsigned int i = 0; i < width; i++)
 	{
 		mGrid[i] = new Tile[height];
+		
+		for (unsigned int j = 0; j < height; j++)
+		{
+			mGrid[i][j].Init({ i, j });
+		}
 	}
 
 	mWidth = width;
@@ -34,7 +41,7 @@ void Grid::Init(int width, int height, sf::Vector2f position)
 
 	SetPosition(position);
 
-	SelectTile({ 0, 0 });
+	//SelectTile(nullptr);
 }
 
 void Grid::Deinit()
@@ -58,20 +65,38 @@ void Grid::LoadFromFile(std::string path) // Incomplete
 
 	for (unsigned int i = 0; i < mWidth; i++)
 	{
-		mGrid[i][0].Init(Tile::Wall);
-		mGrid[i][mHeight - 1].Init(Tile::Wall);
+		mGrid[i][0].SetType(Tile::Wall);
+		mGrid[i][mHeight - 1].SetType(Tile::Wall);
 	}
 	for (unsigned int i = 0; i < mHeight; i++)
 	{
-		mGrid[0][i].Init(Tile::Wall);
-		mGrid[mWidth - 1][i].Init(Tile::Wall);
+		mGrid[0][i].SetType(Tile::Wall);
+		mGrid[mWidth - 1][i].SetType(Tile::Wall);
 	}
 
-	mGrid[1][1].Init(Tile::Walkable, Game::GetPlayer(Player::PLAYER1), 100);
-	mGrid[mWidth - 2][mHeight - 2].Init(Tile::Walkable, Game::GetPlayer(Player::PLAYER2), 100);
+	Tile* player1Spawn = GetTile({ 1, 1 });
+	player1Spawn->SetOwner(Game::GetPlayer(Player::PLAYER1));
+	player1Spawn->SetUnitCount(100);
 
-	SelectTile({ 0, 0 });
+	Tile* player2Spawn = GetTile({ mWidth - 2, mHeight - 2 });
+	player2Spawn->SetOwner(Game::GetPlayer(Player::PLAYER2));
+	player2Spawn->SetUnitCount(100);
+
+	SelectTile(nullptr);
 }
+
+Tile* Grid::GetTile(sf::Vector2u tileIndex)
+{
+	if (tileIndex.x > mWidth || tileIndex.y > mHeight)
+	{
+		return nullptr;
+	}
+	else
+	{
+		return &mGrid[tileIndex.x][tileIndex.y];
+	}
+}
+
 
 void Grid::SetPosition(sf::Vector2f position)
 {
@@ -95,22 +120,28 @@ bool Grid::GridRectContains(sf::Vector2f position)
 
 void Grid::HandleClick(sf::Vector2u tileIndex, sf::Mouse::Button button)
 {
+	Tile* clickedTile = GetTile(tileIndex);
+
+	if (clickedTile == nullptr) 
+	{ 
+		std::cout << "HandleClick tileIndex is not valid index! something is wrong!" << std::endl;
+		return;
+	}
+
 	switch (button)
 	{
 	case sf::Mouse::Left:
-		SelectTile(tileIndex);
+		SelectTile(clickedTile);
 		break;
 	case sf::Mouse::Right:
-		if (IsAdjacent(mSelectedTile, tileIndex))
+		if (IsAdjacent(mSelectedTile, clickedTile))
 		{
-			//std::cout << "Is adjacent!" << std::endl; // DEBUG
-			sf::Vector2u other = tileIndex;
+			std::cout << "Is adjacent!" << std::endl; // DEBUG
 
-			Tile& currentTile = GetTile(mSelectedTile);
-			Direction dir = GetDirection(mSelectedTile, other);
-			unsigned int amount = currentTile.GetUnitCount()/2;
+			Direction dir = GetDirection(mSelectedTile->GetGridIndex(), tileIndex);
+			unsigned int amount = mSelectedTile->GetUnitCount()/2;
 
-			currentTile.SetMove(dir, amount);
+			mSelectedTile->SetMove(dir, amount);
 		} 
 		else
 		{
@@ -122,70 +153,31 @@ void Grid::HandleClick(sf::Vector2u tileIndex, sf::Mouse::Button button)
 	}
 }
 
-bool Grid::IsAdjacent(sf::Vector2u first, sf::Vector2u second)
+bool Grid::IsAdjacent(Tile* first, Tile* second)
 {
-	int difX = first.x - second.x;
-	int difY = first.y - second.y;
+	sf::Vector2u firstIndex  = first->GetGridIndex();
+	sf::Vector2u secondIndex = second->GetGridIndex();
+
+	int difX = firstIndex.x - secondIndex.x;
+	int difY = firstIndex.y - secondIndex.y;
 
 	return (difX == 0 && (difY == -1 || difY == 1)) || (difY == 0 && (difX == -1 || difX == 1));
 }
 
-Direction Grid::GetDirection(sf::Vector2u from, sf::Vector2u to)
+void Grid::SelectTile(Tile* tile)
 {
-	sf::Vector2i dir = sf::Vector2i(to - from);
-
-	if (dir.x == 1 && dir.y == 0)
+	if (mSelectedTile != nullptr)
 	{
-		std::cout << "Right" << std::endl;
-		return DirectionRight;
-	}
-	else if (dir.x == -1 && dir.y == 0)
-	{
-		std::cout << "Left" << std::endl;
-		return DirectionLeft;
+		mSelectedTile->SetSelected(false);
 	}
 
-	if (dir.y == 1 && dir.x == 0)
-	{
-		std::cout << "Down" << std::endl;
-		return DirectionDown;
-	} 
-	else if (dir.y == -1 && dir.x == 0)
-	{
-		std::cout << "Up" << std::endl;
-		return DirectionUp;
-	}
+	mSelectedTile = tile;
 
-	return DirectionNone;
-}
-
-void Grid::SelectTile(sf::Vector2u tileIndex)
-{
-	if (tileIndex.x > mWidth || tileIndex.y > mHeight)
+	if (tile != nullptr)
 	{
-		// TODO: Handle error
-		std::cout << "Select out of bounds, doing nothing (DEFINE THIS ERROR LATER)" << std::endl;
-	} else
-	{
-		mGrid[mSelectedTile.x][mSelectedTile.y].SetSelected(false);
-
-		mGrid[tileIndex.x][tileIndex.y].SetSelected(true);
-		mSelectedTile = tileIndex;
+		tile->SetSelected(true);
 	}
 }
-
-/*void Grid::SetTileSize(float size)
-{
-for (int i = 0; i < mWidth; i++)
-{
-for (int j = 0; j < mHeight; j++)
-{
-mGrid[i][j].SetSize(size);
-}
-}
-
-//SetPosition(mPosition);
-}*/
 
 void Grid::Draw()
 {
