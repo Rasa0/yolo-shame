@@ -10,6 +10,8 @@ sf::Font Game::mFont;
 Grid Game::mBoard;
 sf::Vector2f Game::mBoardPos;
 
+std::vector<sf::Drawable*> Game::mDrawables;
+
 
 void Game::Init()
 {
@@ -88,6 +90,11 @@ void Game::Update()
 void Game::Render()
 {
 	mWindow.clear(sf::Color::Magenta);
+
+	for each(sf::Drawable* drawable in mDrawables)
+	{
+		mWindow.draw(*drawable);
+	}
 
 	mBoard.Draw();
 
