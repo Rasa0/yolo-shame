@@ -103,9 +103,20 @@ void Grid::HandleClick(sf::Vector2u tileIndex, sf::Mouse::Button button)
 		SelectTile(tileIndex);
 		break;
 	case sf::Mouse::Right:
-		if (IsAdjacent(tileIndex, mSelectedTile))
+		if (IsAdjacent(mSelectedTile, tileIndex))
 		{
-			// TODO: implement rightclick behaviour
+			//std::cout << "Is adjacent!" << std::endl; // DEBUG
+			sf::Vector2u other = tileIndex;
+
+			Tile& currentTile = GetTile(mSelectedTile);
+			Direction dir = GetDirection(mSelectedTile, other);
+			unsigned int amount = currentTile.GetUnitCount()/2;
+
+			currentTile.SetMove(dir, amount);
+		} 
+		else
+		{
+			std::cout << "Can't move, not adjacent!" << std::endl; // DEBUG
 		}
 		break;
 	default:
@@ -115,7 +126,39 @@ void Grid::HandleClick(sf::Vector2u tileIndex, sf::Mouse::Button button)
 
 bool Grid::IsAdjacent(sf::Vector2u first, sf::Vector2u second)
 {
-	return ((first.x + 1) == second.x || (first.x - 1) == second.x) != ((first.y + 1) == second.y || (first.y - 1) == second.y);
+	int difX = first.x - second.x;
+	int difY = first.y - second.y;
+
+	return (difX == 0 && (difY == -1 || difY == 1)) || (difY == 0 && (difX == -1 || difX == 1));
+}
+
+Direction Grid::GetDirection(sf::Vector2u from, sf::Vector2u to)
+{
+	sf::Vector2i dir = sf::Vector2i(to - from);
+
+	if (dir.x == 1 && dir.y == 0)
+	{
+		cout << "Right" << endl;
+		return DirectionRight;
+	}
+	else if (dir.x == -1 && dir.y == 0)
+	{
+		cout << "Left" << endl;
+		return DirectionLeft;
+	}
+
+	if (dir.y == 1 && dir.x == 0)
+	{
+		cout << "Down" << endl;
+		return DirectionDown;
+	} 
+	else if (dir.y == -1 && dir.x == 0)
+	{
+		cout << "Up" << endl;
+		return DirectionUp;
+	}
+
+	return DirectionNone;
 }
 
 void Grid::SelectTile(sf::Vector2u tileIndex)

@@ -4,6 +4,7 @@
 
 #include "Player.h"
 #include "Game.h"
+#include "Direction.h"
 
 class Tile
 {
@@ -25,6 +26,9 @@ public:
 	void SetOwner(Player* owner);
 	void SetUnitCount(unsigned int count);
 	void SetSelected(bool selected);
+	void SetMove(Direction direction, unsigned int amount);
+
+	unsigned int GetUnitCount() { return mUnitCount; }
 
 	void Draw();
 private:
@@ -34,7 +38,11 @@ private:
 
 	TileType mType;
 	Player* mOwner;
+
 	unsigned int mUnitCount;
+	Direction mMoveDirection;
+	unsigned int mMoveAmount;
+
 
 	bool mSelected;
 };

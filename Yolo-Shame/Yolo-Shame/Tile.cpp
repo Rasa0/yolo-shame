@@ -1,9 +1,11 @@
 
+#include <iostream>
+
 #include "Game.h"
 #include "Tile.h"
 
 Tile::Tile()
-: mType(Walkable), mUnitCount(0), mOwner(nullptr), mSelected(false)
+: mType(Walkable), mUnitCount(0), mOwner(nullptr), mSelected(false), mMoveDirection(DirectionNone), mMoveAmount(0)
 {
 	SetSize(32); // MagicNumber: size
 	mBackground.setFillColor(sf::Color::White);
@@ -70,6 +72,25 @@ void Tile::SetSelected(bool selected)
 {
 	mSelected = selected;
 }
+
+void Tile::SetMove(Direction direction, unsigned int amount)
+{
+	if (mOwner == nullptr)
+	{
+		std::cout << "Can't move, not owned!" << std::endl; // DEBUG
+	}
+	else if (amount > mUnitCount)
+	{
+		std::cout << "Can't move, too few units!" << std::endl;
+	}
+	else
+	{
+		std::cout << "Move set! dir: " << direction << " amount: " << amount << std::endl; // DEBUG
+		mMoveDirection = direction;
+		mMoveAmount = amount;
+	}
+}
+
 
 void Tile::Draw()
 {

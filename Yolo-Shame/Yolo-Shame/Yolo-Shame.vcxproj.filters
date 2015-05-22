@@ -32,5 +32,8 @@
     <ClInclude Include="Grid.h" />
     <ClInclude Include="Tile.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="Direction.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

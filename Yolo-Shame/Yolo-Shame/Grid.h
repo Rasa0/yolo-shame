@@ -20,12 +20,15 @@ public:
 
 	sf::Vector2f GetPosition() { return mPosition; }
 	float GetTileSize() { return mTileSize; }
+	Tile& GetTile(sf::Vector2u tileIndex) { return mGrid[tileIndex.x][tileIndex.y]; }
 
 	void SetPosition(sf::Vector2f position);
 	
 	bool GridRectContains(sf::Vector2f position);
 	void HandleClick(sf::Vector2u tileIndex, sf::Mouse::Button);
 	bool IsAdjacent(sf::Vector2u first, sf::Vector2u second);
+
+	Direction GetDirection(sf::Vector2u from, sf::Vector2u to);
 
 	void SelectTile(sf::Vector2u tileIndex);
 
