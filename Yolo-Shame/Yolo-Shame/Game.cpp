@@ -12,6 +12,10 @@ sf::Vector2f Game::mBoardPos;
 
 std::vector<sf::Drawable*> Game::mDrawables;
 
+sf::RectangleShape Game::mTurnButton;
+sf::Text Game::mTurnText;
+std::string Game::mCurrentTurn[3] = { "Player 1", "Player 2", "Execute" };
+int Game::mTurnIndex = 0;
 
 void Game::Init()
 {
@@ -24,6 +28,16 @@ void Game::Init()
 	mBoardPos = { 30, 30 };
 	mBoard.LoadFromFile("blaj"); // Incomplete
 
+	mTurnButton.setPosition({ 400, 50 });
+	mTurnButton.setSize({ 80, 20 });
+
+	mTurnText.setFont(mFont);
+	mTurnText.setPosition({ 400, 100 });
+	mTurnText.setString("BLAJ");
+	mTurnText.setColor(sf::Color::White);
+
+	mDrawables.push_back(&mTurnButton);
+	mDrawables.push_back(&mTurnText);
 }
 
 void Game::Deinit() {}
@@ -60,8 +74,7 @@ void Game::HandleEvents()
 
 void Game::HandleMousePress(sf::Event event)
 {
-	// TODO: Refactor this to mBoard? (make a handleclick function in mGrid)
-	sf::Vector2f clickedCoords = mWindow.mapPixelToCoords({ event.mouseButton.x, event.mouseButton.y }); // TODO: Can this get negative?
+	sf::Vector2f clickedCoords = mWindow.mapPixelToCoords({ event.mouseButton.x, event.mouseButton.y }); // TODO: Can the coords get negative?
 
 	if (mBoard.GridRectContains(clickedCoords))
 	{
@@ -75,6 +88,10 @@ void Game::HandleMousePress(sf::Event event)
 	switch (event.mouseButton.button)
 	{
 	case sf::Mouse::Left:
+		if (mTurnButton.getGlobalBounds().contains(clickedCoords))
+		{
+			AdvanceTurn();
+		}
 		break;
 	case sf::Mouse::Right:
 		break;
@@ -85,6 +102,7 @@ void Game::HandleMousePress(sf::Event event)
 
 void Game::Update()
 {
+	mTurnText.setString(mCurrentTurn[mTurnIndex]);
 }
 
 void Game::Render()
@@ -99,4 +117,11 @@ void Game::Render()
 	mBoard.Draw();
 
 	mWindow.display();
+}
+
+void Game::AdvanceTurn()
+{
+	mTurnIndex = ++mTurnIndex % 3;
+
+	// TODO: Implement tile cleanup
 }

@@ -1,5 +1,6 @@
 #pragma once
 #include<vector>
+#include<string>
 
 #include<SFML\Graphics.hpp>
 
@@ -27,9 +28,16 @@ private:
 
 	static std::vector<sf::Drawable*> mDrawables;	
 
+	static sf::RectangleShape mTurnButton;
+	static sf::Text	mTurnText;
+	static std::string mCurrentTurn[3];
+	static int mTurnIndex;
+
 	static void HandleEvents();
 	static void HandleMousePress(sf::Event);
 	static void Update();
 	static void Render();
+
+	static void AdvanceTurn();
 };
 
